@@ -26,8 +26,8 @@ public class RouteController {
   @GetMapping({"/", "/index", "/home"})
   public String index() {
     return "Welcome, in order to make an API call direct your browser or Postman to an endpoint "
-        + "\n\n This can be done using the following format: \n\n http:127.0.0"
-        + ".1:8080/endpoint?arg=value";
+            + "\n\n This can be done using the following format: \n\n http:127.0.0"
+            + ".1:8080/endpoint?arg=value";
   }
 
   /**
@@ -46,10 +46,10 @@ public class RouteController {
       departmentMapping = IndividualProjectApplication.myFileDatabase.getDepartmentMapping();
 
       if (!departmentMapping.containsKey(deptCode.toUpperCase())) {
-        return new ResponseEntity<>("Department Not Found", HttpStatus.OK);
+        return new ResponseEntity<>("Department Not Found", HttpStatus.NOT_FOUND);
       } else {
         return new ResponseEntity<>(departmentMapping.get(deptCode.toUpperCase()).toString(),
-            HttpStatus.NOT_FOUND);
+                HttpStatus.OK);
       }
 
     } catch (Exception e) {
@@ -86,7 +86,7 @@ public class RouteController {
           return new ResponseEntity<>("Course Not Found", HttpStatus.NOT_FOUND);
         } else {
           return new ResponseEntity<>(coursesMapping.get(Integer.toString(courseCode)).toString(),
-              HttpStatus.FORBIDDEN);
+                  HttpStatus.OK);
         }
 
       }
@@ -150,10 +150,10 @@ public class RouteController {
       if (doesDepartmentExists) {
         HashMap<String, Department> departmentMapping;
         departmentMapping = IndividualProjectApplication.myFileDatabase.getDepartmentMapping();
-        return new ResponseEntity<>("There are: " + -departmentMapping.get(deptCode)
-            .getNumberOfMajors() + " majors in the department", HttpStatus.OK);
+        return new ResponseEntity<>("There are: " + departmentMapping.get(deptCode)
+                .getNumberOfMajors() + " majors in the department", HttpStatus.OK);
       }
-      return new ResponseEntity<>("Department Not Found", HttpStatus.FORBIDDEN);
+      return new ResponseEntity<>("Department Not Found", HttpStatus.NOT_FOUND);
     } catch (Exception e) {
       return handleException(e);
     }
@@ -177,7 +177,7 @@ public class RouteController {
         HashMap<String, Department> departmentMapping;
         departmentMapping = IndividualProjectApplication.myFileDatabase.getDepartmentMapping();
         return new ResponseEntity<>(departmentMapping.get(deptCode).getDepartmentChair() + " is "
-            + "the department chair.", HttpStatus.OK);
+                + "the department chair.", HttpStatus.OK);
       }
       return new ResponseEntity<>("Department Not Found", HttpStatus.NOT_FOUND);
     } catch (Exception e) {
@@ -213,7 +213,7 @@ public class RouteController {
 
         Course requestedCourse = coursesMapping.get(Integer.toString(courseCode));
         return new ResponseEntity<>(requestedCourse.getCourseLocation() + " is where the course "
-            + "is located.", HttpStatus.OK);
+                + "is located.", HttpStatus.OK);
       } else {
         return new ResponseEntity<>("Course Not Found", HttpStatus.NOT_FOUND);
       }
@@ -238,7 +238,7 @@ public class RouteController {
    */
   @GetMapping(value = "/findCourseInstructor", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> findCourseInstructor(@RequestParam(value = "deptCode") String deptCode,
-                                             @RequestParam(value = "courseCode") int courseCode) {
+                                                @RequestParam(value = "courseCode") int courseCode) {
     try {
       boolean doesCourseExists;
       doesCourseExists = retrieveCourse(deptCode, courseCode).getStatusCode() == HttpStatus.OK;
@@ -251,7 +251,7 @@ public class RouteController {
 
         Course requestedCourse = coursesMapping.get(Integer.toString(courseCode));
         return new ResponseEntity<>(requestedCourse.getInstructorName() + " is the instructor for"
-            + " the course.", HttpStatus.OK);
+                + " the course.", HttpStatus.OK);
       } else {
         return new ResponseEntity<>("Course Not Found", HttpStatus.NOT_FOUND);
       }
@@ -288,8 +288,9 @@ public class RouteController {
         coursesMapping = departmentMapping.get(deptCode).getCourseSelection();
 
         Course requestedCourse = coursesMapping.get(Integer.toString(courseCode));
-        return new ResponseEntity<>("The course meets at: " + "some time ",
-            HttpStatus.OK);
+        return new ResponseEntity<>("The course meets at: "
+                + requestedCourse.getCourseTimeSlot() + ".",
+                HttpStatus.OK);
       } else {
         return new ResponseEntity<>("Course Not Found", HttpStatus.NOT_FOUND);
       }

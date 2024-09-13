@@ -17,9 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration
 public class DepartmentUnitTests {
 
-  /**
-   * This is pre set-up for tests.
-   */
+  /**This is pre-work to initialize before tests.*/
   @BeforeAll
   public static void setupDepartmentForTesting() {
 
@@ -34,8 +32,7 @@ public class DepartmentUnitTests {
   @Test
   public void toStringTest() {
     String expectedResult =
-            "CS 2500: \nInstructor: Griffin Newbold; "
-                    + "Location: 417 IAB; Time: 11:40-12:55\n"
+            "CS 2500: \nInstructor: Griffin Newbold; Location: 417 IAB; Time: 11:40-12:55\n"
             + "CS 3000: \nInstructor: David; Location: Room 102; Time: 11:00-12:00\n";
     assertEquals(expectedResult, departmentCS.toString());
   }
